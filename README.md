@@ -35,9 +35,21 @@ The code follows typical C++ project structure with an include dir, src dir, and
    4. ```mdlOutputs(SimStruct* S, int_T tid)```
       1. The main function of your s-function. This is executed every simulation step, and within this block we can access ptrs to input signal, output signal, signal size info, parameter info, etc. Example implementation is provided in the ```src/matlab_simulink_s_function.cpp```
    5. (optional) ```mdlTerminate(SimStruct* S)```
-       1. This is the cleanup code and should delete objects created via ```new`` statement in ```C++```
+       1. This is the cleanup code and should delete objects created via ```new``` statement in ``` C++ ```
 6. The ```SimStruct *S``` is the window to the Simulink execution state and static parameters. Through the ```SimStruct``` we can access pointers to the ```inputs```, ```outputs```, and ```parameters```.
 7. Examples of how to leverage the ```SimStruct``` can be found here [simstruct examples](https://www.mathworks.com/help/simulink/sfg/simstruct_introduction.html)
+8. Finally, edit ```CMakeLists.txt``` and modify ```set(CUSTOM_PACKAGES OpenCV
+    ) ``` with packages required by your source code. For example ```set(CUSTOM_PACKAGES pkg1
+   pkg2 ...
+    ) ```. Then ```set(SRCS ${CMAKE_SOURCE_DIR}/src/matlab_simulink_s_function.cpp ${CMAKE_SOURCE_DIR}/src/optical_flow_uav_velocity.cpp)
+set(INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/include")```. For your source if the name is different, then modify them accordingly.
+9. Create a ```build``` directory and run ```cmake```
+    1. ```bash
+       mkdir build && cd build
+       cmake .. -DMATLAB_BIN_DIR=/path/to/my/matlab/binary/dir
+       ```
+   2. If everything is OK the configuration will finish and your s-function can be found in the build directory
+10. To use it in a simulink model, an example file is provided ```test_s_function.slx```
 
 # Support
 If you find this repo helpful, please ⭐ star the repo to show your support!
