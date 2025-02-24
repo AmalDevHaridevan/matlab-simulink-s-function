@@ -1,9 +1,5 @@
 cmake_minimum_required(VERSION 3.2)
 project(matlab_simulink_s_function)
-# // mex -v COMPFLAGS='$COMPFLAGS /MT' opt_flow_s_func.cpp cpp_optflow_tracking.cpp -I"C:/Users/admin/opencv-4.x/install/opencv/include" -L"C:/Users/admin/opencv-4.x/install/opencv/x64/vc17/staticlib" -lopencv_core4100 -lopencv_features2d4100 -lopencv_imgproc4100 -lopencv_ximgproc4100 -lopencv_video4100 -lopencv_highgui4100 -lopencv_flann4100 -lopencv_calib3d4100 -lippiw -lIlmImf -lippicvmt -littnotify -lzlib
-# // NOTE!! Compile static opencv libs, i.e use -DBUILD_SHARED_LIBS=OFF
-# // For mingw compiler
-# // use: mex -v  opt_flow_s_func.cpp cpp_optflow_tracking.cpp -I"C:\Users\sdcnlab427\Desktop\SDCNLab\Amal\opencv\install\opencv\include" -L"C:/Users/sdcnlab427/Desktop/SDCNLab/Amal/opencv/install/opencv/x64/mingw/staticlib" -lopencv_optflow4100  -lopencv_ximgproc4100 -lopencv_video4100 -lopencv_calib3d4100 -lopencv_imgcodecs4100 -lopencv_features2d4100 -lopencv_flann4100 -lopencv_imgproc4100   -lopencv_core4100    -lIlmImf -lzlib
 set(MATLAB_BIN_DIR "" CACHE PATH "Path to MATLAB bin directory")
 if ("${MATLAB_BIN_DIR}" STREQUAL "")
     message(FATAL_ERROR "MATLAB_BIN_DIR not set, This is the directory where matlab/mex executable is located")
