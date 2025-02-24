@@ -1,5 +1,5 @@
 # matlab-simulink-s-function
-Here are some examples of how to create custom S-functions to interface C++ or C code with the Simulink coder. This allows users to compile their Simulink models with third-party software, which is not possible otherwise.
+Examples of how to create custom S-functions to interface C++ or C code with the Simulink coder. This allows users to compile their Simulink models with third-party software, which is not possible otherwise.
 # Structure
 The code follows typical C++ project structure with an include dir, src dir, and an optional build file. In this example we will use *CMake* to ease the build process.
 ```
