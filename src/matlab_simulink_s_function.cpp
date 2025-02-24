@@ -2,8 +2,9 @@
 // your name of the s-function, this will be the name of the mex file
 #define S_FUNCTION_NAME matlab_simulink_s_function
 #define S_FUNCTION_LEVEL 2
+#define MDL_START
 // Define this variable to use persistent memory, by default we use static objects to access our custom class instantiated in the s-function
-// #define USE_PERSISTENT_MEMORY
+#define USE_PERSISTENT_MEMORY
 
 #include "simstruc.h"
 #include "optical_flow_uav_velocity.hpp"
@@ -43,8 +44,6 @@ static void mdlInitializeSizes(SimStruct* S) {
     int id_ = (int) mxGetScalar(ssGetSFcnParam(S,3));
     ssSetInputPortMatrixDimensions(S, 0, (int) mxGetScalar(ssGetSFcnParam(S, 4)) , (int) mxGetScalar(ssGetSFcnParam(S, 5))); // Input: image matrix
     ssSetInputPortDirectFeedThrough(S, 0, 1);
-    
-    img_map[id_] = std::make_shared<cv::Mat>(height_, width_, CV_8UC1, cv::Scalar(0));
 
     ssSetInputPortWidth(S, 1,1); // Sampling time for the image , delta t between last image and current image,
     // We use it here because we also want to enable this is simulation, otherwise the delta t will be based on real time
@@ -61,6 +60,8 @@ static void mdlInitializeSizes(SimStruct* S) {
     #ifdef USE_PERSISTENT_MEMORY
     // add persistent worker
     ssSetNumPWork(S, 1); 
+    #else 
+    img_map[id_] = std::make_shared<cv::Mat>(height_, width_, CV_8UC1, cv::Scalar(0));
     #endif
 
     /* specify the sim state compliance to be same as a built-in block */
@@ -73,8 +74,6 @@ static void mdlInitializeSizes(SimStruct* S) {
                  SS_OPTION_WORKS_WITH_CODE_REUSE |
                  SS_OPTION_EXCEPTION_FREE_CODE |
                  SS_OPTION_USE_TLC_WITH_ACCELERATOR);
-
-
 }
 
 
@@ -83,6 +82,9 @@ static void mdlInitializeSampleTimes(SimStruct* S) {
     ssSetSampleTime(S, 0, INHERITED_SAMPLE_TIME);
     ssSetOffsetTime(S, 0, 0.0);
     ssSetModelReferenceSampleTimeDefaultInheritance(S);
+}
+
+static void  mdlStart(SimStruct* S){
 
     real_T focal_length =  mxGetScalar(ssGetSFcnParam(S, 0));
     double focal_length_ = (double) focal_length;
@@ -98,15 +100,15 @@ static void mdlInitializeSampleTimes(SimStruct* S) {
     #else 
     OpticalFlowTracking* obj = new OpticalFlowTracking(100, 1.0, focal_length_, cmos_width_, cmos_height_);
     // error check the newly created obj
-    if (&obj_ == nullptr) {
+    if (obj == nullptr) {
         ssSetErrorStatus(S, "Pointer to instatiated class is null during init.");
         return;
     }
     // cast to void* to store in the persistent memory
     ssSetPWorkValue(S, 0, static_cast<void*>(obj));
     #endif
-
 }
+
 static void mdlOutputs(SimStruct* S, int_T tid) {
   
     
