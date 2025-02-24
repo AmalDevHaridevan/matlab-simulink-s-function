@@ -1,6 +1,6 @@
 
 // your name of the s-function, this will be the name of the mex file
-#define S_FUNCTION_NAME opt_flow_s_func
+#define S_FUNCTION_NAME matlab_simulink_s_function
 #define S_FUNCTION_LEVEL 2
 // Define this variable to use persistent memory, by default we use static objects to access our custom class instantiated in the s-function
 // #define USE_PERSISTENT_MEMORY
